@@ -1,0 +1,45 @@
+package com.customer;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class ContactuDao {
+
+	private static Connection conn;  //instatnt variable
+	private static boolean isSuccess;
+	private  String query;
+    private static PreparedStatement pst;
+    private static Statement stmt = null;
+    private static ResultSet rs;
+
+    public static boolean insertcontact(String fname,String lname,String email,String birthday,String password,String repassword,String gender, String mobile, String problem) {
+		
+		try {
+			conn= DBconnect.getConnection();
+			
+			stmt = conn.createStatement();
+			
+			
+			String sql ="insert into contact  value (0,'"+fname+"','"+lname+"','"+gender+"','"+mobile+"','"+problem+"')";
+			
+			int rs = stmt.executeUpdate(sql);
+			
+			
+			if(rs>0) {
+				isSuccess = true;
+			}
+			else {
+				isSuccess = false;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isSuccess;
+    }
+				
+			
+    
+

@@ -1,0 +1,80 @@
+package com.customer;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+public class UserDao {
+	
+	
+		private static Connection conn;
+	
+		private  String query;
+	    private static PreparedStatement pst;
+	    private static ResultSet rs;
+		public UserDao(Connection con) {
+			this.conn = con;
+		}
+		/*
+		public User userLogin(String email, String password) {
+			
+			User user = null;
+	        try {
+	            query = "select * from users where email=? and password=?";
+	            pst = this.con.prepareStatement(query);
+	            pst.setString(1, email);
+	            pst.setString(2, password);
+	            rs = pst.executeQuery();
+	            if(rs.next()){
+	            	user = new User();
+	            	
+	            	user.setId(rs.getInt("id"));
+	            	user.setFname(rs.getString("fname"));
+	            	user.setLname(rs.getString("lname"));
+	            	user.setEmail(rs.getString("email"));
+	            	user.setBirthday(rs.getString("birthday"));
+	            	user.setPassword(rs.getString("birthday"));
+	            	user.setRepassword(rs.getString("repassword"));
+	            	user.setGender(rs.getString("gender"));
+	            }
+	          //  new User(0, password, password, email, email, password, password, password);
+	        } catch (SQLException e) {
+	            System.out.print(e.getMessage());
+	        }
+	        return user;
+	    }*/
+		public static List<User> validate(String email,String password) {
+
+			ArrayList<User> emp = new ArrayList<>();
+			User user=new User();
+
+			try {
+
+				
+				String sql = "select * from User where email ='" + email + "' and password ='"+ password + "'";
+				conn = DBconnect.getConnection();
+				pst = conn.prepareStatement(sql);
+				
+
+				if (rs.next()) {
+					user.setId(rs.getInt("id"));
+	            	user.setFname(rs.getString("fname"));
+	            	user.setLname(rs.getString("lname"));
+	            	user.setEmail(rs.getString("email"));
+	            	user.setBirthday(rs.getString("birthday"));
+	            	user.setPassword(rs.getString("password"));
+	            	user.setRepassword(rs.getString("repassword"));
+	            	user.setGender(rs.getString("gender"));
+
+				//	Employer e = new Employer(id, name, address, tel, nic);
+					emp.add(user);
+				}
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+
+			return emp;
+
+		}
+
+}

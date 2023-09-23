@@ -1,0 +1,67 @@
+package com.customer;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/loginServlet")
+public class loginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		response.sendRedirect(login.jsp);
+	}
+
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF8");
+		
+		try(PrintWriter out =response.getWriter()){
+			//Catch parameter from the form
+			String email=request.getParameter(login-email);
+			String password=request.getParameter(login-password);
+			
+			try {
+				//user login
+				UserDao udao = new UserDao(Dbcon.getConnection());
+				User user = udao.userLogin(email,password);
+				if(user !=null) {
+					out.print("Nice");
+					request.getSession().setAttribute("email", user);
+					
+					response.sendRedirect("index.jsp")
+				}
+				//Admin login
+				AdminDao adao = new AdminDao(DbCon.getConnection());
+				Admin admin = adao.adminLogin(email,password);
+				if(admin !=null) {
+					out.print("Nice");
+					request.getSession().setAttribute("admin", admin);
+					response.sendRedirect("admin.jsp");
+				}
+				else {
+					out.print("wrong");
+				}
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		
+	}  
+	catch (SQLException e) {
+		e.printStackTrace();
+	}
+}
+
+}
